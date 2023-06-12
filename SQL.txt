@@ -1,0 +1,74 @@
+CREATE DATABASE Radovi;
+
+USE Radovi;
+
+CREATE TABLE Osoba (
+  osobaID INT PRIMARY KEY AUTO_INCREMENT,
+  ime VARCHAR(50),
+  prezime VARCHAR(50),
+  username VARCHAR(50),
+  password VARCHAR(50),
+  idUloga INT
+  
+);
+
+CREATE TABLE IF NOT EXISTS STATUSI (
+statusID INT PRIMARY KEY AUTO_INCREMENT,
+naziv VARCHAR(50)
+);
+
+
+CREATE TABLE IF NOT EXISTS ULOGE (
+ulogaID INT PRIMARY KEY AUTO_INCREMENT,
+naziv VARCHAR(50)
+);
+
+CREATE TABLE Studenti (
+  studentID INT PRIMARY KEY AUTO_INCREMENT,
+  ime VARCHAR(50),
+  prezime VARCHAR(50)
+  
+);
+CREATE TABLE Predmeti (
+  predmetID INT PRIMARY KEY AUTO_INCREMENT,
+  naziv VARCHAR(50)
+  
+);
+
+CREATE TABLE ZavrsniRadovi (
+  zavrsniRadID INT PRIMARY KEY AUTO_INCREMENT,
+  naslov VARCHAR(100),
+  opis VARCHAR(255),
+  student INT,
+  predmet INT,
+  ocjena INT,
+  datumPrijave DATETIME,
+  datumUrucenja DATETIME,
+  mentorID INT,
+  statusID INT,
+  FOREIGN KEY (student) REFERENCES Studenti(studentID),
+  FOREIGN KEY (mentorID) REFERENCES Osoba(osobaID),
+  FOREIGN KEY (statusID) REFERENCES STATUSI(statusID),
+  FOREIGN KEY (predmet) REFERENCES Predmeti(predmetID)
+);
+
+CREATE TABLE Obrana (
+  obranaID INT PRIMARY KEY AUTO_INCREMENT,
+  zavrsniradID INT,
+  predsjednik INT,
+  clan1 INT,
+  clan2 INT,
+  ocjenaobrane INT,
+  prosjekocjena DECIMAL(2,3),
+  konacnaocjena INT,
+  FOREIGN KEY (zavrsniradID) REFERENCES ZavrsniRadovi(zavrsniRadID),
+  FOREIGN KEY (predsjednik) REFERENCES Osoba(osobaID),
+  FOREIGN KEY (clan1) REFERENCES Osoba(osobaID),
+  FOREIGN KEY (clan2) REFERENCES Osoba(osobaID)
+);
+
+INSERT INTO `uloge` (`ulogaID`, `naziv`) VALUES ('1', 'nastavnik'), ('2', 'referada');
+
+INSERT INTO `osoba` (`osobaID`, `ime`, `prezime`, `username`, `password`, `idUloga`) VALUES (NULL, 'Igor', 'Gros', 'gros', 'gros', '1'), (NULL, 'Mirko', 'Mirkic', 'mirko', 'mirko', '2');
+
+INSERT INTO `predmeti` (`predmetID`, `naziv`) VALUES (NULL, 'Objektno orijentirano programiranje'), (NULL, 'Baze podataka');
